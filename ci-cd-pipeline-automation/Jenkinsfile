@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    echo 'Building...'
+                    sh 'docker build -t sample-app .'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    echo 'Testing...'
+                    sh 'docker run --rm sample-app pytest'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying...'
+                    sh 'kubectl apply -f kubernetes/'
+                }
+            }
+        }
+    }
+}
